@@ -1,6 +1,5 @@
 import styled from "styled-components";
-import colors from "@/styles/colors";
-import fonts from "@/styles/fonts";
+import styles from "@/styles";
 
 export const WelcomeContainer = styled.div`
   align-items: center;
@@ -10,27 +9,30 @@ export const WelcomeContainer = styled.div`
   justify-content: center;
 
   h1 {
-    color: ${colors.brown};
-    font-family: ${fonts.fontFamily.title};
+    color: ${styles.colors.brown};
+    font-family: ${styles.fonts.fontFamily.title};
     font-size: 6rem;
-    text-shadow: 5px 4px 2px ${colors["yellow-400"]};
+    text-shadow: 5px 4px 2px ${styles.colors["yellow-400"]};
     margin-bottom: 2rem;
   }
 `;
 
 export const StartButton = styled.button`
-  background: ${colors["yellow-400"]};
+  background: ${styles.colors["yellow-400"]};
   border: 3px solid white;
   border-radius: 4px;
   box-shadow: rgba(0, 0, 0, 0.6) 2px 4px 14px 4px;
-  color: ${colors.brown};
+  color: ${styles.colors.brown};
   cursor: pointer;
-  font-family: ${fonts.fontFamily.title};
+import fonts from "@/styles/fonts";
+font-family: ${styles.fonts.fontFamily.title};
   font-size: 1.375rem;
-  letter-spacing: 1px;
+  letter-spacing: 0.0625rem;
+  margin-bottom: 5rem;
   padding: 1rem 2rem;
   transform: skew(8deg, 4deg) scale(1);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  transition: box-shadow ${styles.transitions.default},
+    transform ${styles.transitions.default};
 
   span {
     transform: skew(-4deg, -2deg);

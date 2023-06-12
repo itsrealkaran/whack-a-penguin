@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { StartButton, WelcomeContainer } from "./styles";
 
 interface WelcomeProps {
@@ -11,6 +12,7 @@ const Welcome = ({ handleOnStart }: WelcomeProps) => {
       <StartButton onClick={handleOnStart}>
         <span>start</span>
       </StartButton>
+      <Link to="leaderboard">leaderboard</Link>
     </WelcomeContainer>
   );
 };

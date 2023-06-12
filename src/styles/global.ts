@@ -1,5 +1,5 @@
 import { createGlobalStyle } from "styled-components";
-import colors from "./colors";
+import styles from "./";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -15,8 +15,22 @@ const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     padding: 0;
-    background: ${colors["green-100"]} ;
-    font-family: Open-Sans, Helvetica, Sans-Serif;
+    background: ${styles.colors["green-100"]} ;
+    font-family: ${styles.fonts.fontFamily.title}
+  }
+
+  a {
+    border: 0;
+    background: transparent;
+    color: ${styles.colors.brown};
+    font-family: ${styles.fonts.fontFamily.title};
+    font-size: 1.25rem;
+    transition: transform ${styles.transitions.default};
+    transform: scaleX(1);
+
+    &:hover {
+      transform: scaleX(1.1);
+    }
   }
 `;
 

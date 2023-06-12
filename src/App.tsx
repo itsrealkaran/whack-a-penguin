@@ -1,25 +1,27 @@
-import { useState } from "react";
-import Battlefield from "./components/Battlefield";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Leaderboard from "./pages/Leaderboard";
+import Home from "./pages/Home";
 import GlobalStyle from "./styles/global";
-import Header from "./components/Header";
-import Welcome from "./components/Welcome";
+import store from "./store";
+import { Provider } from "react-redux";
 
 function App() {
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  const handleOnStart = () => {
-    setIsPlaying(true);
-  };
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Home />,
+    },
+    {
+      path: "/leaderboard",
+      element: <Leaderboard />,
+    },
+  ]);
 
   return (
-    <>
+    <Provider store={store}>
       <GlobalStyle />
-      {/* <Header>
-        <button onClick={handleOnStart}>{isPlaying ? "Stop" : "Start"}</button>
-      </Header> */}
-
-      {isPlaying ? <Battlefield /> : <Welcome handleOnStart={handleOnStart} />}
-    </>
+      <RouterProvider router={router} />
+    </Provider>
   );
 }
 

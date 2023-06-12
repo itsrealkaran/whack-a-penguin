@@ -1,7 +1,6 @@
 import styled from "styled-components";
-import ReactResponsiveSpritesheet from "react-responsive-spritesheet";
-
-import MoleBackground from "@assets/sprites.png";
+import MoleVisible from "@assets/mole-visible.png";
+import MoleHidden from "@assets/mole-hidden.png";
 
 export const MoleContainer = styled.div`
   display: inline-flex;
@@ -10,20 +9,11 @@ export const MoleContainer = styled.div`
   overflow: hidden;
   position: relative;
   width: 180px;
+  background: url(${MoleHidden});
 `;
 
 export const MoleItem = styled.div`
-  // background: url(${MoleBackground}) center no-repeat;
-  // overflow: hidden;
-  // height: 150px;
-  // width: 190px;
-  // background-position: 0 0;
-
-  width: 180px;
+  background: url(${MoleVisible});
   height: 150px;
-  background: red;
-`;
-
-export const MoleSprite = styled(ReactResponsiveSpritesheet)`
-  width: 160px;
+  width: 180px;
 `;
