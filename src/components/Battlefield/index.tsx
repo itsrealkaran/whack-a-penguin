@@ -19,20 +19,22 @@ export interface MoleType {
 
 const Battlefield = () => {
   const MOLES_LENGTH = 12;
+  const INCREMENT_SCORE_BY = 10;
+  const dispatch = useAppDispatch();
+
   const [molesArray, setMoles] = useState<MoleType[]>([]);
   const [score, setScore] = useState(0);
   const [hasTimeLeft, setHasTimeLeft] = useState(true);
-  const dispatch = useAppDispatch();
 
   const onMoleClick = () => {
-    setScore(prevState => prevState + 10);
+    setScore(prevState => prevState + INCREMENT_SCORE_BY);
   };
 
   useEffect(() => {
     const molesArray = Array.from(Array(MOLES_LENGTH).keys()).map(() => ({
-      speed: gsap.utils.random(0.5, 2),
       delay: gsap.utils.random(0.5, 5),
       id: uuidv4(),
+      speed: gsap.utils.random(0.5, 2),
     }));
 
     setMoles(molesArray);
