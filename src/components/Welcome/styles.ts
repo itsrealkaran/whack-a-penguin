@@ -11,9 +11,13 @@ export const WelcomeContainer = styled.div`
   h1 {
     color: ${styles.colors.brown};
     font-family: ${styles.fonts.fontFamily.title};
-    font-size: 6rem;
+    font-size: 3rem;
     text-shadow: 5px 4px 2px ${styles.colors["yellow-400"]};
     margin-bottom: 2rem;
+
+    @media (min-width: 1400px) {
+      font-size: 6rem;
+    }
   }
 `;
 
@@ -25,10 +29,10 @@ export const StartButton = styled.button`
   color: ${styles.colors.brown};
   cursor: pointer;
   font-family: ${styles.fonts.fontFamily.title};
-  font-size: 1.375rem;
+  font-size: 1.125rem;
   letter-spacing: 0.0625rem;
   margin-bottom: 5rem;
-  padding: 1rem 2rem;
+  padding: 0.75rem 1.625rem;
   transform: skew(8deg, 4deg) scale(1);
   transition: box-shadow ${styles.transitions.default},
     transform ${styles.transitions.default};
@@ -41,13 +45,20 @@ export const StartButton = styled.button`
     box-shadow: rgba(0, 0, 0, 0.6) 1px 1px 14px 1px;
     transform: skew(8deg, 4deg) scale(1.05);
   }
+
+  @media (min-width: 1400px) {
+    font-size: 1.375rem;
+    padding: 1rem 2rem;
+  }
 `;
 
 export const NameInput = styled.div`
+  align-items: flex-end;
   display: flex;
+  flex-direction: column;
   gap: 8px;
-  margin-bottom: 4.5rem;
   height: 70px;
+  margin-bottom: 4.5rem;
 
   input {
     border: 2px solid ${styles.colors.brown};
@@ -67,8 +78,8 @@ export const NameInput = styled.div`
   }
 
   button {
-    align-self: flex-start;
     height: 50px;
+    width: 100%;
 
     &:first-child {
       &:hover {
@@ -82,6 +93,21 @@ export const NameInput = styled.div`
         background-color: ${styles.colors.blue};
         transform: skew(8deg, 4deg);
       }
+    }
+  }
+
+  &.error {
+    input {
+      border-color: ${styles.colors.red};
+    }
+  }
+
+  @media (min-width: 1400px) {
+    flex-direction: row;
+    align-items: baseline;
+
+    button {
+      width: 80px;
     }
   }
 `;

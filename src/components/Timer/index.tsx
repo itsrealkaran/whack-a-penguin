@@ -6,19 +6,19 @@ import { Countdown } from "./styles";
 
 interface TimerProps {
   onTimesUp: () => void;
+  gameTime: number;
 }
 
-const Timer = ({ onTimesUp }: TimerProps) => {
-  const GAME_TIME_SECONDS = 3;
-  const [timeLeft, setTimeLeft] = useState(GAME_TIME_SECONDS);
+const Timer = ({ onTimesUp, gameTime }: TimerProps) => {
   const { isPlaying, startedDate } = useSelector(gameSelector);
+  const [timeLeft, setTimeLeft] = useState(gameTime);
 
   useEffect(() => {
     if (isPlaying) {
       const interval = setInterval(() => {
         const date = parseISO(startedDate!);
         const secondsPassed = differenceInSeconds(new Date(), date);
-        const secondsLeft = GAME_TIME_SECONDS - secondsPassed;
+        const secondsLeft = gameTime - secondsPassed;
 
         if (secondsLeft <= 0) {
           clearInterval(interval);

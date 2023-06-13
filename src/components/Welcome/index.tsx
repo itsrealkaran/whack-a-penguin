@@ -9,6 +9,7 @@ const Welcome = () => {
   const dispatch = useAppDispatch();
   const [showNameInput, setShowNameInput] = useState(false);
   const [playerName, setPlayerName] = useState("");
+  const [inputError, setInputError] = useState(false);
 
   const handleShowName = () => {
     setShowNameInput(true);
@@ -16,10 +17,17 @@ const Welcome = () => {
 
   const handleCancel = () => {
     setShowNameInput(false);
+    setInputError(false);
     setPlayerName("");
   };
 
   const handleOnStart = () => {
+    if (playerName.trim() === "") {
+      setInputError(true);
+      return;
+    }
+
+    setInputError(false);
     dispatch(
       setNewGame({
         playerName,
@@ -31,7 +39,7 @@ const Welcome = () => {
     <WelcomeContainer>
       <h1>Whack a mole!</h1>
       {showNameInput ? (
-        <NameInput>
+        <NameInput className={inputError ? "error" : ""}>
           <Button onClick={handleCancel}>
             <span>cancel</span>
           </Button>

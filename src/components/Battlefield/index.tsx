@@ -13,13 +13,15 @@ import FinalScore from "../FinalScore";
 
 export interface MoleType {
   id: string;
-  speed: number;
   delay: number;
+  speed: number;
 }
 
 const Battlefield = () => {
   const MOLES_LENGTH = 12;
   const INCREMENT_SCORE_BY = 10;
+  const GAME_TIME_SECONDS = 120;
+
   const dispatch = useAppDispatch();
 
   const [molesArray, setMoles] = useState<MoleType[]>([]);
@@ -54,7 +56,7 @@ const Battlefield = () => {
         <>
           <Header>
             <ButtonLink onClick={handleGoBack}>back</ButtonLink>
-            <Timer onTimesUp={onTimesUp} />
+            <Timer onTimesUp={onTimesUp} gameTime={GAME_TIME_SECONDS} />
             <Score>score: {score}</Score>
           </Header>
           <Field>

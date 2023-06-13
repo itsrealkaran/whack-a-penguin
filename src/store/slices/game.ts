@@ -4,16 +4,11 @@ import { RootState } from ".";
 export interface NewGame {
   playerName: string;
 }
-interface Record {
-  score: number;
-  playerName: string;
-}
 
 export interface GameState extends NewGame {
   isPlaying: boolean;
   startedDate: string | null;
   score: number;
-  leaderboard: Record[];
 }
 
 const initialState: GameState = {
@@ -21,7 +16,6 @@ const initialState: GameState = {
   startedDate: null,
   playerName: "",
   score: 0,
-  leaderboard: [],
 };
 
 const gameSlice = createSlice({

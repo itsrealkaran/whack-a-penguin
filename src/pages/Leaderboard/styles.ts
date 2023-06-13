@@ -4,9 +4,13 @@ import styled from "styled-components";
 export const Title = styled.h2`
   color: ${styles.colors.brown};
   font-family: ${styles.fonts.fontFamily.title};
-  font-size: 4rem;
+  font-size: 3rem;
   text-shadow: 5px 4px 2px ${styles.colors["yellow-400"]};
   margin-bottom: 2rem;
+
+  @media (min-width: 1400px) {
+    font-size: 4rem;
+  }
 `;
 
 export const LeaderboardContainer = styled.div`
@@ -37,15 +41,25 @@ export const Record = styled.li`
   }
 
   &:first-child {
-    font-size: 2.75rem;
+    font-size: 2.5rem;
 
     span {
       color: ${styles.colors.red};
     }
   }
+
+  @media (min-width: 1400px) {
+    &:first-child {
+      font-size: 2.75rem;
+    }
+  }
 `;
 
 export const NoResult = styled.p`
-  font-size: 1.375rem;
+  font-size: 1rem;
   margin-bottom: 5rem;
+
+  @media (min-width: 1400px) {
+    font-size: 1.375rem;
+  }
 `;

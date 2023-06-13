@@ -1,7 +1,8 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from ".";
+import { RecordsService } from "@/services/records";
 
-interface Record {
+export interface Record {
   score: number;
   playerName: string;
 }
@@ -14,20 +15,33 @@ const initialState: LeaderboardState = {
   leaderboard: [],
 };
 
+export const fetchRecords = createAsyncThunk(
+  "leaderboard/fetchRecords",
+  async () => {
+    const response = await RecordsService.getRecords();
+    return response.data;
+  }
+);
+
+export const addRecord = createAsyncThunk(
+  "leaderboard/addRecord",
+  async (record: Record) => {
+    const response = await RecordsService.addRecord(record);
+    return response.data;
+  }
+);
+
 const leaderboardSlice = createSlice({
   name: "leaderboard",
   initialState,
-  reducers: {
-    setNewRecord: (state, action: PayloadAction<Record>) => {
-      state.leaderboard.push({
-        playerName: action.payload.playerName,
-        score: action.payload.score,
-      });
-    },
+  reducers: {},
+  extraReducers: builder => {
+    builder.addCase(fetchRecords.fulfilled, (state, action) => {
+      state.leaderboard = action.payload;
+    });
   },
 });
 
-export const { setNewRecord } = leaderboardSlice.actions;
 export const leaderboardSelector = (state: RootState) =>
   state.leaderboardReducer;
 
