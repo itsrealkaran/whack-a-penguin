@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { MoleContainer, MoleItem } from "./styles";
+import { MoleContainer, MoleItem, Teste } from "./styles";
 import { MoleType } from "../Battlefield";
 
 interface MoleProps {
@@ -10,7 +10,9 @@ interface MoleProps {
 
 const Mole = ({ mole, onMoleClick }: MoleProps) => {
   const buttonRef = useRef(null);
+  const speedRef = useRef(2);
   const holeRef = useRef<gsap.core.Tween>();
+  const SPEED_INCREASE = 0.7;
 
   const [whacked, setIsWhacked] = useState(false);
 
@@ -22,14 +24,14 @@ const Mole = ({ mole, onMoleClick }: MoleProps) => {
       yoyo: true,
       repeat: -1,
       delay: mole.delay,
-      repeatDelay: mole.delay,
       duration: mole.speed,
+      repeatDelay: mole.delay,
     });
 
     return () => {
       if (holeRef.current) holeRef.current.kill();
     };
-  }, [mole.delay, mole.speed]);
+  }, []);
 
   useEffect(() => {
     if (whacked) {
@@ -37,12 +39,16 @@ const Mole = ({ mole, onMoleClick }: MoleProps) => {
       gsap.to(buttonRef.current, {
         yPercent: 100,
         duration: 0.1,
+        onStart: () => {
+          speedRef.current = speedRef.current * SPEED_INCREASE;
+          const speed = gsap.utils.random(0.5, speedRef.current);
+
+          holeRef.current?.duration(speed);
+        },
         onComplete: () => {
-          gsap.delayedCall(gsap.utils.random(1, 3), () => {
+          gsap.delayedCall(gsap.utils.random(1, 5), () => {
             setIsWhacked(false);
-            holeRef.current
-              ?.restart()
-              .timeScale(holeRef.current.timeScale() * 1.2);
+            holeRef.current?.restart();
           });
         },
       });
@@ -56,7 +62,9 @@ const Mole = ({ mole, onMoleClick }: MoleProps) => {
 
   return (
     <MoleContainer>
-      <MoleItem ref={buttonRef} onClick={handleOnMoleClick} />
+      <div>
+        <MoleItem ref={buttonRef} onClick={handleOnMoleClick} />
+      </div>
     </MoleContainer>
   );
 };
