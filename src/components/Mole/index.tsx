@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { MoleContainer, MoleItem, Teste } from "./styles";
+import { MoleContainer, MoleItem } from "./styles";
 import { MoleType } from "../Battlefield";
 
 interface MoleProps {

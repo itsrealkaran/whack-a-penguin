@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@/store";
 import { gameSelector, setIsPlaying } from "@/store/slices/game";
-import { addRecord, setNewRecord } from "@/store/slices/leaderboard";
+import { addRecord } from "@/store/slices/leaderboard";
 import ButtonLink from "../ButtonLink";
 import { FinalScoreContainer } from "./styles";
 
