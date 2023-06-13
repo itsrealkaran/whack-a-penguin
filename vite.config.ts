@@ -4,6 +4,7 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: "/whack-a-mole/",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -11,6 +12,5 @@ export default defineConfig({
       "@components": path.resolve(__dirname, "./src/components"),
     },
   },
-  base: "/whack-a-mole/",
   plugins: [react()],
 });
