@@ -24,9 +24,16 @@
     "paths": {
       "@/*": ["src/*"],
       "@components/*": ["src/components/*"],
-      "@assets/*": ["src/assets/*"]
-    }
+      "@assets/*": ["src/assets/*"],
+      "@store/*": ["src/store/*"],
+      "@gameconfig/*": ["src/game-config/*"]
+    },
+
+    "esModuleInterop": true
   },
   "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "references": [{ "path": "./tsconfig.node.json" }],
+  "transform": {
+    "\\.tsx$": "<rootDir>/node_modules/babel-jest"
+  }
 }

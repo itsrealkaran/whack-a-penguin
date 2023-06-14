@@ -4,12 +4,14 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "/whack-a-mole/",
+  base: "/",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
       "@assets": path.resolve(__dirname, "./src/assets"),
       "@components": path.resolve(__dirname, "./src/components"),
+      "@store": path.resolve(__dirname, "./src/store"),
+      "@gameconfig": path.resolve(__dirname, "./src/game-config"),
     },
   },
   plugins: [react()],

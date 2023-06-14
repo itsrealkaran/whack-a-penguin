@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { MoleContainer, MoleItem } from "./styles";
 import { MoleType } from "../Battlefield";
+import gameConfig from "@/game-config";
 
 interface MoleProps {
   mole: MoleType;
@@ -9,17 +10,16 @@ interface MoleProps {
 }
 
 const Mole = ({ mole, onMoleClick }: MoleProps) => {
-  const buttonRef = useRef(null);
+  const buttonRef = useRef<HTMLDivElement>(null);
   const speedRef = useRef(2);
-  const holeRef = useRef<gsap.core.Tween>();
-  const SPEED_INCREASE = 0.7;
+  const moleRef = useRef<gsap.core.Tween>();
 
   const [whacked, setIsWhacked] = useState(false);
 
   useEffect(() => {
     gsap.set(buttonRef.current, { yPercent: 100 });
 
-    holeRef.current = gsap.to(buttonRef.current, {
+    moleRef.current = gsap.to(buttonRef.current, {
       yPercent: 0,
       yoyo: true,
       repeat: -1,
@@ -29,26 +29,26 @@ const Mole = ({ mole, onMoleClick }: MoleProps) => {
     });
 
     return () => {
-      if (holeRef.current) holeRef.current.kill();
+      if (moleRef.current) moleRef.current.kill();
     };
   }, []);
 
   useEffect(() => {
     if (whacked) {
-      holeRef.current?.pause();
+      moleRef.current?.pause();
       gsap.to(buttonRef.current, {
         yPercent: 100,
         duration: 0.1,
         onStart: () => {
-          speedRef.current = speedRef.current * SPEED_INCREASE;
+          speedRef.current = speedRef.current * gameConfig.SPEED_INCREASE;
           const speed = gsap.utils.random(0.5, speedRef.current);
 
-          holeRef.current?.duration(speed);
+          moleRef.current?.duration(speed);
         },
         onComplete: () => {
           gsap.delayedCall(gsap.utils.random(1, 5), () => {
             setIsWhacked(false);
-            holeRef.current?.restart();
+            moleRef.current?.restart();
           });
         },
       });
@@ -63,7 +63,11 @@ const Mole = ({ mole, onMoleClick }: MoleProps) => {
   return (
     <MoleContainer>
       <div>
-        <MoleItem ref={buttonRef} onClick={handleOnMoleClick} />
+        <MoleItem
+          ref={buttonRef}
+          onClick={handleOnMoleClick}
+          data-testid="mole"
+        />
       </div>
     </MoleContainer>
   );

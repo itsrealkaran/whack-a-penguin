@@ -10,6 +10,7 @@ import { setIsPlaying } from "@/store/slices/game";
 import { useAppDispatch } from "@/store";
 import Timer from "../Timer";
 import FinalScore from "../FinalScore";
+import gameConfig from "@gameconfig/index";
 
 export interface MoleType {
   id: string;
@@ -18,10 +19,6 @@ export interface MoleType {
 }
 
 const Battlefield = () => {
-  const MOLES_LENGTH = 12;
-  const INCREMENT_SCORE_BY = 10;
-  const GAME_TIME_SECONDS = 120;
-
   const dispatch = useAppDispatch();
 
   const [molesArray, setMoles] = useState<MoleType[]>([]);
@@ -29,15 +26,17 @@ const Battlefield = () => {
   const [hasTimeLeft, setHasTimeLeft] = useState(true);
 
   const onMoleClick = () => {
-    setScore(prevState => prevState + INCREMENT_SCORE_BY);
+    setScore(prevState => prevState + gameConfig.INCREMENT_SCORE_BY);
   };
 
   useEffect(() => {
-    const molesArray = Array.from(Array(MOLES_LENGTH).keys()).map(() => ({
-      delay: gsap.utils.random(0.5, 5),
-      id: uuidv4(),
-      speed: gsap.utils.random(0.5, 2),
-    }));
+    const molesArray = Array.from(Array(gameConfig.MOLES_COUNT).keys()).map(
+      () => ({
+        delay: gsap.utils.random(0.5, 5),
+        id: uuidv4(),
+        speed: gsap.utils.random(0.5, 2),
+      })
+    );
 
     setMoles(molesArray);
   }, []);
@@ -56,7 +55,10 @@ const Battlefield = () => {
         <>
           <Header>
             <ButtonLink onClick={handleGoBack}>back</ButtonLink>
-            <Timer onTimesUp={onTimesUp} gameTime={GAME_TIME_SECONDS} />
+            <Timer
+              onTimesUp={onTimesUp}
+              gameTime={gameConfig.GAME_TIME_SECONDS}
+            />
             <Score>score: {score}</Score>
           </Header>
           <Field>
