@@ -45,6 +45,7 @@ const Welcome = () => {
           </Button>
           <input
             type="text"
+            placeholder="enter your name"
             value={playerName}
             onChange={e => setPlayerName(e.target.value)}
           />
