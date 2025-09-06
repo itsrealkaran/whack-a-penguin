@@ -67,15 +67,21 @@ export class BlockchainService {
       const result = await fetchCallReadOnlyFunction({
         contractAddress: this.contractAddress,
         contractName: this.contractName,
-        functionName: 'get-daily-leaderboard',
+        functionName: 'get-all-daily-scores',
         functionArgs: [],
         senderAddress: this.contractAddress, // Can be any valid address for read-only
         network: this.network,
       });
 
-      // Parse the result - this will depend on how we structure the contract
+      // Parse the result - convert map to array
       const parsedResult = cvToValue(result);
-      return Array.isArray(parsedResult) ? parsedResult : [];
+      if (parsedResult && typeof parsedResult === 'object') {
+        return Object.entries(parsedResult).map(([player, data]: [string, any]) => ({
+          player,
+          score: data.score || 0
+        })).sort((a, b) => b.score - a.score);
+      }
+      return [];
     } catch (error) {
       console.error('Error fetching leaderboard:', error);
       return [];
@@ -105,9 +111,10 @@ export class BlockchainService {
   // Get game stats
   async getGameStats(): Promise<GameStats> {
     try {
-      const [poolAmount, leaderboard] = await Promise.all([
+      const [poolAmount, leaderboard, gameStats] = await Promise.all([
         this.getPoolAmount(),
-        this.getDailyLeaderboard()
+        this.getDailyLeaderboard(),
+        this.getContractStats()
       ]);
 
       const topPlayer = leaderboard.length > 0 ? leaderboard[0].player : '';
@@ -116,7 +123,7 @@ export class BlockchainService {
         poolAmount,
         dailyLeaderboard: leaderboard,
         topPlayer,
-        lastResetDay: 0 // Will be implemented in contract
+        lastResetDay: gameStats.lastResetDay || 0
       };
     } catch (error) {
       console.error('Error fetching game stats:', error);
@@ -126,6 +133,25 @@ export class BlockchainService {
         topPlayer: '',
         lastResetDay: 0
       };
+    }
+  }
+
+  // Get contract statistics
+  async getContractStats(): Promise<any> {
+    try {
+      const result = await fetchCallReadOnlyFunction({
+        contractAddress: this.contractAddress,
+        contractName: this.contractName,
+        functionName: 'get-game-stats',
+        functionArgs: [],
+        senderAddress: this.contractAddress,
+        network: this.network,
+      });
+
+      return cvToValue(result);
+    } catch (error) {
+      console.error('Error fetching contract stats:', error);
+      return {};
     }
   }
 

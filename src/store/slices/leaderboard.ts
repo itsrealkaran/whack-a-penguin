@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from ".";
-import { RecordsService } from "@/services/records";
+import { BlockchainService } from "@/services/blockchain";
 
 export interface Record {
   score: number;
@@ -18,15 +18,15 @@ const initialState: LeaderboardState = {
 export const fetchRecords = createAsyncThunk(
   "leaderboard/fetchRecords",
   async () => {
-    const response = await RecordsService.getRecords();
-    return response.data;
+    const response = await BlockchainService.getDailyLeaderboard();
+    return response;
   }
 );
 
 export const addRecord = createAsyncThunk(
   "leaderboard/addRecord",
   async (record: Record) => {
-    const response = await RecordsService.addRecord(record);
+    const response = await BlockchainService.submitScore(record.score);
     return response.data;
   }
 );
