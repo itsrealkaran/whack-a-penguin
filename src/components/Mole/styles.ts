@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import MoleVisible from "@assets/pengu.png";
+import MoleHit from "@assets/pengu-hit.png";
 import MoleHidden from "@assets/mole-hidden.png";
 
 export const MoleContainer = styled.div<{ isHitting?: boolean }>`
@@ -52,8 +53,8 @@ export const MoleContainer = styled.div<{ isHitting?: boolean }>`
   }
 `;
 
-export const MoleItem = styled.div`
-  background: url(${MoleVisible}) 2px 5px / contain no-repeat;
+export const MoleItem = styled.div<{ isWhacked?: boolean }>`
+  background: url(${props => props.isWhacked ? MoleHit : MoleVisible}) 2px 15px / contain no-repeat;
   bottom: -6px;
   height: 70px;
   position: absolute;
@@ -61,7 +62,7 @@ export const MoleItem = styled.div`
   z-index: 1;
 
   @media (min-width: 1400px) {
-    background-position: 25px 5px;
+    background-position: 25px 15px;
     bottom: 20px;
     height: 110px;
     width: 165px;

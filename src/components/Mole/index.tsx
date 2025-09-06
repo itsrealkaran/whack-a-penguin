@@ -41,21 +41,25 @@ const Mole = ({ mole, onMoleClick, onEmptyHoleClick }: MoleProps) => {
   useEffect(() => {
     if (whacked) {
       moleRef.current?.pause();
-      gsap.to(buttonRef.current, {
-        yPercent: 100,
-        duration: 0.1,
-        onStart: () => {
-          speedRef.current = speedRef.current * gameConfig.SPEED_INCREASE;
-          const speed = gsap.utils.random(0.5, speedRef.current);
+      
+      // Show hit image for a moment before going down
+      gsap.delayedCall(0.3, () => {
+        gsap.to(buttonRef.current, {
+          yPercent: 100,
+          duration: 0.1,
+          onStart: () => {
+            speedRef.current = speedRef.current * gameConfig.SPEED_INCREASE;
+            const speed = gsap.utils.random(0.5, speedRef.current);
 
-          moleRef.current?.duration(speed);
-        },
-        onComplete: () => {
-          gsap.delayedCall(gsap.utils.random(1, 5), () => {
-            setIsWhacked(false);
-            moleRef.current?.restart();
-          });
-        },
+            moleRef.current?.duration(speed);
+          },
+          onComplete: () => {
+            gsap.delayedCall(gsap.utils.random(1, 5), () => {
+              setIsWhacked(false);
+              moleRef.current?.restart();
+            });
+          },
+        });
       });
     }
   }, [whacked]);
@@ -97,6 +101,7 @@ const Mole = ({ mole, onMoleClick, onEmptyHoleClick }: MoleProps) => {
         <MoleItem
           ref={buttonRef}
           data-testid="mole"
+          isWhacked={whacked}
         />
       </div>
     </MoleContainer>
