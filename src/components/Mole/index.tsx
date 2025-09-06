@@ -17,6 +17,7 @@ const Mole = ({ mole, onMoleClick, onEmptyHoleClick }: MoleProps) => {
 
   const [whacked, setIsWhacked] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isHitting, setIsHitting] = useState(false);
 
   useEffect(() => {
     gsap.set(buttonRef.current, { yPercent: 100 });
@@ -60,16 +61,28 @@ const Mole = ({ mole, onMoleClick, onEmptyHoleClick }: MoleProps) => {
   }, [whacked]);
 
   const handleOnMoleClick = () => {
+    // Show hit animation
+    setIsHitting(true);
+    
     if (isVisible && !whacked) {
       setIsWhacked(true);
       onMoleClick();
     } else {
       onEmptyHoleClick();
     }
+    
+    // Reset hit animation after a short delay
+    setTimeout(() => {
+      setIsHitting(false);
+    }, 200);
   };
 
   return (
-    <MoleContainer onClick={handleOnMoleClick} data-testid="hole">
+    <MoleContainer 
+      onClick={handleOnMoleClick} 
+      data-testid="hole"
+      isHitting={isHitting}
+    >
       <div>
         <MoleItem
           ref={buttonRef}

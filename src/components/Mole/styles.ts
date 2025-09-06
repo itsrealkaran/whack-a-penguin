@@ -3,12 +3,14 @@ import MoleVisible from "@assets/mole-visible.png";
 import MoleHidden from "@assets/mole-hidden.png";
 import Hammer from "@assets/hammer.png";
 
-export const MoleContainer = styled.div`
+export const MoleContainer = styled.div<{ isHitting?: boolean }>`
   height: 90px;
   justify-content: center;
   position: relative;
   width: 100%;
-  cursor: url(${Hammer}), auto;
+  cursor: ${props => props.isHitting ? 'url(${Hammer}) 16 16, auto' : 'url(${Hammer}), auto'};
+  transform: ${props => props.isHitting ? 'scale(0.95)' : 'scale(1)'};
+  transition: transform 0.1s ease;
 
   &::after {
     background: url(${MoleHidden}) center bottom / contain no-repeat;
@@ -26,6 +28,20 @@ export const MoleContainer = styled.div`
     position: relative;
     width: 100%;
     height: 100%;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle, rgba(255, 0, 0, 0.3) 0%, transparent 70%);
+    opacity: ${props => props.isHitting ? 1 : 0};
+    transition: opacity 0.1s ease;
+    z-index: 3;
+    pointer-events: none;
   }
 
   @media (min-width: 1400px) {
