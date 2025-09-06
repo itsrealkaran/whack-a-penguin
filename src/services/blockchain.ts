@@ -1,12 +1,11 @@
 import { 
   fetchCallReadOnlyFunction, 
-  makeContractCall,
   PostConditionMode,
   AnchorMode,
-  standardPrincipalCV,
   uintCV,
-  stringUtf8CV
+  cvToValue
 } from '@stacks/transactions';
+import { openContractCall } from '@stacks/connect';
 import { STACKS_TESTNET } from '@stacks/network';
 
 // Contract configuration - will be updated when we deploy
@@ -31,8 +30,13 @@ export class BlockchainService {
   private contractAddress = CONTRACT_ADDRESS;
   private contractName = CONTRACT_NAME;
 
+  // Update contract address after deployment
+  updateContractAddress(address: string) {
+    this.contractAddress = address;
+  }
+
   // Hit a mole - deduct payment and update score
-  async hitMole(userSession: any): Promise<string> {
+  async hitMole(): Promise<string> {
     const options = {
       contractAddress: this.contractAddress,
       contractName: this.contractName,
@@ -41,13 +45,10 @@ export class BlockchainService {
       network: this.network,
       postConditionMode: PostConditionMode.Allow,
       anchorMode: AnchorMode.Any,
-      onFinish: (data: any) => {
-        console.log('Hit mole transaction:', data.txId);
-      },
     };
 
     return new Promise((resolve, reject) => {
-      makeContractCall({
+      openContractCall({
         ...options,
         onFinish: (data: any) => {
           console.log('Hit mole transaction:', data.txId);
@@ -73,7 +74,8 @@ export class BlockchainService {
       });
 
       // Parse the result - this will depend on how we structure the contract
-      return result.value || [];
+      const parsedResult = cvToValue(result);
+      return Array.isArray(parsedResult) ? parsedResult : [];
     } catch (error) {
       console.error('Error fetching leaderboard:', error);
       return [];
@@ -92,7 +94,8 @@ export class BlockchainService {
         network: this.network,
       });
 
-      return result.value || 0;
+      const parsedResult = cvToValue(result);
+      return typeof parsedResult === 'number' ? parsedResult : 0;
     } catch (error) {
       console.error('Error fetching pool amount:', error);
       return 0;
@@ -127,7 +130,7 @@ export class BlockchainService {
   }
 
   // Submit final score (for end of game)
-  async submitScore(userSession: any, score: number): Promise<string> {
+  async submitScore(score: number): Promise<string> {
     const options = {
       contractAddress: this.contractAddress,
       contractName: this.contractName,
@@ -139,7 +142,7 @@ export class BlockchainService {
     };
 
     return new Promise((resolve, reject) => {
-      makeContractCall({
+      openContractCall({
         ...options,
         onFinish: (data: any) => {
           console.log('Submit score transaction:', data.txId);
