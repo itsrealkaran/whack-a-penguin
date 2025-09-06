@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@/store";
-import { gameSelector, setIsPlaying } from "@/store/slices/game";
+import { gameSelector, resetGame } from "@/store/slices/game";
 import { addRecord } from "@/store/slices/leaderboard";
 import ButtonLink from "../ButtonLink";
 import { FinalScoreContainer } from "./styles";
@@ -28,11 +28,11 @@ const FinalScore = ({ score }: FinalScoreProps) => {
   }, []);
 
   const handleOnPlayAgain = () => {
-    dispatch(setIsPlaying(false));
+    dispatch(resetGame());
   };
 
   const handleGoToLeaderboard = () => {
-    dispatch(setIsPlaying(false));
+    dispatch(resetGame());
     navigate("/leaderboard");
   };
 

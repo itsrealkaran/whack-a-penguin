@@ -6,9 +6,10 @@ import Mole from "../Mole";
 import { gsap } from "gsap";
 import ButtonLink from "../ButtonLink";
 import Header from "../Header";
-import { setIsPlaying } from "@/store/slices/game";
+import { incrementScore, loseLife, setIsPlaying } from "@/store/slices/game";
 import { useAppDispatch } from "@/store";
-import Timer from "../Timer";
+import { useSelector } from "react-redux";
+import Lives from "../Lives";
 import FinalScore from "../FinalScore";
 import gameConfig from "@gameconfig/index";
 
@@ -20,13 +21,17 @@ export interface MoleType {
 
 const Battlefield = () => {
   const dispatch = useAppDispatch();
+  const { lives, score } = useSelector((state: any) => state.gameReducer);
 
   const [molesArray, setMoles] = useState<MoleType[]>([]);
-  const [score, setScore] = useState(0);
-  const [hasTimeLeft, setHasTimeLeft] = useState(true);
+  const [gameOver, setGameOver] = useState(false);
 
   const onMoleClick = () => {
-    setScore(prevState => prevState + gameConfig.INCREMENT_SCORE_BY);
+    dispatch(incrementScore(gameConfig.INCREMENT_SCORE_BY));
+  };
+
+  const onEmptyHoleClick = () => {
+    dispatch(loseLife());
   };
 
   useEffect(() => {
@@ -45,25 +50,29 @@ const Battlefield = () => {
     dispatch(setIsPlaying(false));
   };
 
-  const onTimesUp = () => {
-    setHasTimeLeft(false);
-  };
+  useEffect(() => {
+    if (lives <= 0) {
+      setGameOver(true);
+    }
+  }, [lives]);
 
   return (
     <BattlefieldContainer>
-      {hasTimeLeft ? (
+      {!gameOver ? (
         <>
           <Header>
             <ButtonLink onClick={handleGoBack}>back</ButtonLink>
-            <Timer
-              onTimesUp={onTimesUp}
-              gameTime={gameConfig.GAME_TIME_SECONDS}
-            />
+            <Lives />
             <Score>score: {score}</Score>
           </Header>
           <Field>
             {molesArray.map((mole, index) => (
-              <Mole key={index} mole={mole} onMoleClick={onMoleClick} />
+              <Mole 
+                key={index} 
+                mole={mole} 
+                onMoleClick={onMoleClick}
+                onEmptyHoleClick={onEmptyHoleClick}
+              />
             ))}
           </Field>
         </>

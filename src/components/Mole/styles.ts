@@ -8,6 +8,7 @@ export const MoleContainer = styled.div`
   justify-content: center;
   position: relative;
   width: 100%;
+  cursor: url(${Hammer}), auto;
 
   &::after {
     background: url(${MoleHidden}) center bottom / contain no-repeat;

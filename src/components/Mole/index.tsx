@@ -7,14 +7,16 @@ import gameConfig from "@/game-config";
 interface MoleProps {
   mole: MoleType;
   onMoleClick: () => void;
+  onEmptyHoleClick: () => void;
 }
 
-const Mole = ({ mole, onMoleClick }: MoleProps) => {
+const Mole = ({ mole, onMoleClick, onEmptyHoleClick }: MoleProps) => {
   const buttonRef = useRef<HTMLDivElement>(null);
   const speedRef = useRef(2);
   const moleRef = useRef<gsap.core.Tween>();
 
   const [whacked, setIsWhacked] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     gsap.set(buttonRef.current, { yPercent: 100 });
@@ -26,6 +28,8 @@ const Mole = ({ mole, onMoleClick }: MoleProps) => {
       delay: mole.delay,
       duration: mole.speed,
       repeatDelay: mole.delay,
+      onStart: () => setIsVisible(true),
+      onReverseComplete: () => setIsVisible(false),
     });
 
     return () => {
@@ -56,16 +60,19 @@ const Mole = ({ mole, onMoleClick }: MoleProps) => {
   }, [whacked]);
 
   const handleOnMoleClick = () => {
-    setIsWhacked(true);
-    onMoleClick();
+    if (isVisible && !whacked) {
+      setIsWhacked(true);
+      onMoleClick();
+    } else {
+      onEmptyHoleClick();
+    }
   };
 
   return (
-    <MoleContainer>
+    <MoleContainer onClick={handleOnMoleClick} data-testid="hole">
       <div>
         <MoleItem
           ref={buttonRef}
-          onClick={handleOnMoleClick}
           data-testid="mole"
         />
       </div>
