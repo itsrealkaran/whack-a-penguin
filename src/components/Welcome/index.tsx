@@ -37,7 +37,7 @@ const Welcome = () => {
 
   return (
     <WelcomeContainer>
-      <h1>Whack a mole!</h1>
+      <h1>Whack a Penguin!</h1>
       {showNameInput ? (
         <NameInput className={inputError ? "error" : ""}>
           <Button onClick={handleCancel}>

@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import MoleVisible from "@assets/pengu.png";
 import MoleHit from "@assets/pengu-hit.png";
-import MoleHidden from "@assets/mole-hidden.png";
+import MoleHidden from "@assets/pengu-hidden.png";
 
-export const MoleContainer = styled.div<{ isHitting?: boolean }>`
+export const MoleContainer = styled.div<{ isHitting?: boolean; hitAnimation?: 'none' | 'hit' | 'miss' }>`
   height: 90px;
   justify-content: center;
   position: relative;
@@ -36,8 +36,15 @@ export const MoleContainer = styled.div<{ isHitting?: boolean }>`
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(circle, rgba(255, 0, 0, 0.3) 0%, transparent 70%);
-    opacity: ${props => props.isHitting ? 1 : 0};
+    background: ${props => {
+      if (props.hitAnimation === 'hit') {
+        return 'radial-gradient(circle, rgba(0, 100, 255, 0.4) 0%, transparent 70%)';
+      } else if (props.hitAnimation === 'miss') {
+        return 'radial-gradient(circle, rgba(255, 0, 0, 0.4) 0%, transparent 70%)';
+      }
+      return 'radial-gradient(circle, rgba(255, 0, 0, 0.3) 0%, transparent 70%)';
+    }};
+    opacity: ${props => (props.isHitting || props.hitAnimation !== 'none') ? 1 : 0};
     transition: opacity 0.1s ease;
     z-index: 3;
     pointer-events: none;

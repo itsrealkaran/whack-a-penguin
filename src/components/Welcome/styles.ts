@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import styles from "@/styles";
+import BackgroundImage from "@assets/bg.jpg";
+import PenguinHole from "@assets/pengu-hidden.png";
 
 export const WelcomeContainer = styled.div`
   align-items: center;
@@ -7,16 +9,72 @@ export const WelcomeContainer = styled.div`
   flex-direction: column;
   height: 100%;
   justify-content: center;
+  background: url(${BackgroundImage}) center / cover no-repeat;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 1;
+  }
+
+  > * {
+    position: relative;
+    z-index: 2;
+  }
 
   h1 {
-    color: ${styles.colors.brown};
+    color: white;
     font-family: ${styles.fonts.fontFamily.title};
     font-size: 3rem;
-    text-shadow: 5px 4px 2px ${styles.colors["yellow-400"]};
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
     margin-bottom: 2rem;
+    text-align: center;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: -20px;
+      left: -60px;
+      width: 40px;
+      height: 30px;
+      background: url(${PenguinHole}) center / contain no-repeat;
+      z-index: 1;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: -20px;
+      right: -60px;
+      width: 40px;
+      height: 30px;
+      background: url(${PenguinHole}) center / contain no-repeat;
+      z-index: 1;
+    }
 
     @media (min-width: 1400px) {
       font-size: 6rem;
+
+      &::before {
+        top: -40px;
+        left: -120px;
+        width: 80px;
+        height: 60px;
+      }
+
+      &::after {
+        top: -40px;
+        right: -120px;
+        width: 80px;
+        height: 60px;
+      }
     }
   }
 `;

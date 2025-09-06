@@ -18,6 +18,7 @@ const Mole = ({ mole, onMoleClick, onEmptyHoleClick }: MoleProps) => {
   const [whacked, setIsWhacked] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isHitting, setIsHitting] = useState(false);
+  const [hitAnimation, setHitAnimation] = useState<'none' | 'hit' | 'miss'>('none');
 
   useEffect(() => {
     gsap.set(buttonRef.current, { yPercent: 100 });
@@ -54,7 +55,7 @@ const Mole = ({ mole, onMoleClick, onEmptyHoleClick }: MoleProps) => {
             moleRef.current?.duration(speed);
           },
           onComplete: () => {
-            gsap.delayedCall(gsap.utils.random(1, 5), () => {
+            gsap.delayedCall(gsap.utils.random(4, 6), () => {
               setIsWhacked(false);
               moleRef.current?.restart();
             });
@@ -75,20 +76,25 @@ const Mole = ({ mole, onMoleClick, onEmptyHoleClick }: MoleProps) => {
     }
     
     if (isVisible && !whacked) {
+      // Successful hit - show blue animation
+      setHitAnimation('hit');
       setIsWhacked(true);
       onMoleClick();
     } else {
+      // Miss - show red animation
+      setHitAnimation('miss');
       onEmptyHoleClick();
     }
     
-    // Reset hit animation after a short delay
+    // Reset animations after a short delay
     setTimeout(() => {
       setIsHitting(false);
+      setHitAnimation('none');
       // Reset cursor back to normal hammer
       if (field) {
         field.style.cursor = 'url(/src/assets/hammer.png), auto';
       }
-    }, 200);
+    }, 300);
   };
 
   return (
@@ -96,6 +102,7 @@ const Mole = ({ mole, onMoleClick, onEmptyHoleClick }: MoleProps) => {
       onClick={handleOnMoleClick} 
       data-testid="hole"
       isHitting={isHitting}
+      hitAnimation={hitAnimation}
     >
       <div>
         <MoleItem

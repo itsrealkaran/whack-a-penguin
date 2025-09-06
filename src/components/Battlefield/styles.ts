@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import BackgroundImage from "@assets/bg.jpg";
+import BackgroundImage from "@assets/bg.png";
 import styles from "@/styles";
 
 export const BattlefieldContainer = styled.section`

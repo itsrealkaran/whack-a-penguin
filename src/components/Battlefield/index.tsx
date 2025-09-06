@@ -37,9 +37,9 @@ const Battlefield = () => {
   useEffect(() => {
     const molesArray = Array.from(Array(gameConfig.MOLES_COUNT).keys()).map(
       () => ({
-        delay: gsap.utils.random(0.5, 5),
+        delay: gsap.utils.random(0.1, 0.3),
         id: uuidv4(),
-        speed: gsap.utils.random(0.5, 2),
+        speed: gsap.utils.random(0.05, 0.2),
       })
     );
 
