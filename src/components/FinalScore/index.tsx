@@ -1,9 +1,8 @@
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@/store";
-import { gameSelector, resetGame } from "@/store/slices/game";
-import { addRecord } from "@/store/slices/leaderboard";
+import { resetGame } from "@/store/slices/game";
+import { submitScore } from "@/store/slices/leaderboard";
 import ButtonLink from "../ButtonLink";
 import { FinalScoreContainer } from "./styles";
 
@@ -14,15 +13,11 @@ interface FinalScoreProps {
 const FinalScore = ({ score }: FinalScoreProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { playerName } = useSelector(gameSelector);
 
   useEffect(() => {
     if (score > 0) {
       dispatch(
-        addRecord({
-          playerName,
-          score,
-        })
+        submitScore(score),
       );
     }
   }, []);
