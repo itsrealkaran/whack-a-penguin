@@ -1,14 +1,12 @@
 import styled from "styled-components";
 import MoleVisible from "@assets/mole-visible.png";
 import MoleHidden from "@assets/mole-hidden.png";
-import Hammer from "@assets/hammer.png";
 
 export const MoleContainer = styled.div<{ isHitting?: boolean }>`
   height: 90px;
   justify-content: center;
   position: relative;
   width: 100%;
-  cursor: ${props => props.isHitting ? 'url(${Hammer}) 16 16, auto' : 'url(${Hammer}), auto'};
   transform: ${props => props.isHitting ? 'scale(0.95)' : 'scale(1)'};
   transition: transform 0.1s ease;
 
@@ -61,13 +59,11 @@ export const MoleItem = styled.div`
   position: absolute;
   width: 70px;
   z-index: 1;
-  cursor: url(${Hammer}), auto;
 
   @media (min-width: 1400px) {
     background-position: 25px 5px;
     bottom: 20px;
     height: 110px;
     width: 165px;
-    cursor: url(${Hammer}), auto;
   }
 `;

@@ -64,6 +64,9 @@ const Mole = ({ mole, onMoleClick, onEmptyHoleClick }: MoleProps) => {
     // Show hit animation
     setIsHitting(true);
     
+    // Change cursor to hammer2 on every hit
+    document.body.style.cursor = 'url(/src/assets/hammer2.png), auto';
+    
     if (isVisible && !whacked) {
       setIsWhacked(true);
       onMoleClick();
@@ -74,6 +77,8 @@ const Mole = ({ mole, onMoleClick, onEmptyHoleClick }: MoleProps) => {
     // Reset hit animation after a short delay
     setTimeout(() => {
       setIsHitting(false);
+      // Reset cursor back to normal hammer
+      document.body.style.cursor = 'url(/src/assets/hammer.png), auto';
     }, 200);
   };
 

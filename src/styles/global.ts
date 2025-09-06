@@ -17,7 +17,8 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     background: ${styles.colors["green-100"]} ;
-    font-family: ${styles.fonts.fontFamily.title}
+    font-family: ${styles.fonts.fontFamily.title};
+    cursor: url('/src/assets/hammer.png'), auto;
   }
 
   a {
