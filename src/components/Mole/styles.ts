@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import MoleVisible from "@assets/mole-visible.png";
+import MoleVisible from "@assets/pengu.png";
 import MoleHidden from "@assets/mole-hidden.png";
 
 export const MoleContainer = styled.div<{ isHitting?: boolean }>`
