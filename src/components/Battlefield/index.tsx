@@ -57,7 +57,7 @@ const Battlefield = () => {
   }, [lives]);
 
   return (
-    <BattlefieldContainer>
+    <BattlefieldContainer data-testid="battlefield">
       {!gameOver ? (
         <>
           <Header>
@@ -65,7 +65,7 @@ const Battlefield = () => {
             <Lives />
             <Score>score: {score}</Score>
           </Header>
-          <Field>
+          <Field data-testid="field">
             {molesArray.map((mole, index) => (
               <Mole 
                 key={index} 

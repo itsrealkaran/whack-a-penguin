@@ -65,7 +65,10 @@ const Mole = ({ mole, onMoleClick, onEmptyHoleClick }: MoleProps) => {
     setIsHitting(true);
     
     // Change cursor to hammer2 on every hit
-    document.body.style.cursor = 'url(/src/assets/hammer2.png), auto';
+    const field = document.querySelector('[data-testid="field"]') as HTMLElement;
+    if (field) {
+      field.style.cursor = 'url(/src/assets/hammer2.png), auto';
+    }
     
     if (isVisible && !whacked) {
       setIsWhacked(true);
@@ -78,7 +81,9 @@ const Mole = ({ mole, onMoleClick, onEmptyHoleClick }: MoleProps) => {
     setTimeout(() => {
       setIsHitting(false);
       // Reset cursor back to normal hammer
-      document.body.style.cursor = 'url(/src/assets/hammer.png), auto';
+      if (field) {
+        field.style.cursor = 'url(/src/assets/hammer.png), auto';
+      }
     }, 200);
   };
 

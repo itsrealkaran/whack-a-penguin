@@ -15,6 +15,7 @@ export const Field = styled.div`
   grid-template-columns: 80px 80px 80px;
   gap: 50px 50px;
   justify-content: center;
+  cursor: url('/src/assets/hammer.png'), auto;
 
   @media (min-width: 1400px) {
     grid-template-columns: 180px 180px 180px;
