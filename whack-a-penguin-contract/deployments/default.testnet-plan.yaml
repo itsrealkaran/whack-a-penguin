@@ -1,0 +1,18 @@
+---
+id: 0
+name: Testnet deployment
+network: testnet
+stacks-node: "https://api.testnet.hiro.so"
+bitcoin-node: "http://blockstack:blockstacksystem@bitcoind.testnet.stacks.co:18332"
+plan:
+  batches:
+    - id: 0
+      transactions:
+        - contract-publish:
+            contract-name: whack-a-penguin
+            expected-sender: ST1SE0FXZ5A8KX9KWWGF52C7559TBSNYS5JZBEAE9
+            cost: 95120
+            path: "contracts\\whack-a-penguin.clar"
+            anchor-block-only: true
+            clarity-version: 3
+      epoch: "3.2"

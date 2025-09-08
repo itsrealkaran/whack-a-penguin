@@ -1,13 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { AppConfig, UserSession, showConnect } from '@stacks/connect';
+import { connect, disconnect, isConnected as checkIsConnected, getLocalStorage } from '@stacks/connect';
 import { STACKS_TESTNET } from '@stacks/network';
 
-// Stacks configuration
-const appConfig = new AppConfig(['store_write', 'publish_data']);
-const userSession = new UserSession({ appConfig });
-
 interface StacksContextType {
-  userSession: UserSession;
   userData: any;
   isConnected: boolean;
   connectWallet: () => void;
@@ -35,45 +30,65 @@ export const StacksProvider: React.FC<StacksProviderProps> = ({ children }) => {
   const network = STACKS_TESTNET;
 
   useEffect(() => {
-    if (userSession.isSignInPending()) {
-      userSession.handlePendingSignIn().then((userData) => {
-        setUserData(userData);
-        setIsConnected(true);
-      });
-    } else if (userSession.isUserSignedIn()) {
-      setUserData(userSession.loadUserData());
-      setIsConnected(true);
-    }
+    // Check if user is already connected on page load
+    const checkConnection = () => {
+      try {
+        if (checkIsConnected()) {
+          const data = getLocalStorage();
+          if (data && data.addresses && data.addresses.stx && data.addresses.stx.length > 0) {
+            const stxAddress = data.addresses.stx[0].address;
+            const userData = {
+              profile: {
+                stxAddress: {
+                  testnet: stxAddress,
+                  mainnet: stxAddress,
+                }
+              }
+            };
+            setUserData(userData);
+            setIsConnected(true);
+          }
+        }
+      } catch (error) {
+        console.error('Error checking connection:', error);
+      }
+    };
+
+    checkConnection();
   }, []);
 
-  const connectWallet = () => {
-    showConnect({
-      appDetails: {
-        name: 'Whack-a-Penguin',
-        icon: '/favicon.ico',
-      },
-      userSession,
-      onFinish: () => {
-        const userData = userSession.loadUserData();
+  const connectWallet = async () => {
+    try {
+      await connect();
+      console.log('Connection successful');
+      
+      // Get the user data from local storage after connection
+      const data = getLocalStorage();
+      if (data && data.addresses && data.addresses.stx && data.addresses.stx.length > 0) {
+        const stxAddress = data.addresses.stx[0].address;
+        const userData = {
+          profile: {
+            stxAddress: {
+              testnet: stxAddress,
+              mainnet: stxAddress,
+            }
+          }
+        };
         setUserData(userData);
         setIsConnected(true);
-        window.location.reload();
-      },
-      onCancel: () => {
-        console.log('User cancelled wallet connection');
-      },
-    });
+      }
+    } catch (error) {
+      console.error('Error connecting wallet:', error);
+    }
   };
 
   const disconnectWallet = () => {
-    userSession.signUserOut();
+    disconnect();
     setUserData(null);
     setIsConnected(false);
-    window.location.reload();
   };
 
   const value = {
-    userSession,
     userData,
     isConnected,
     connectWallet,
