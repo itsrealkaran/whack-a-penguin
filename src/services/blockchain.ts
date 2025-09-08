@@ -90,7 +90,14 @@ export class BlockchainService {
   // Get daily leaderboard for a specific day
   async getDailyLeaderboard(day?: number): Promise<LeaderboardEntry[]> {
     try {
-      const currentDay = day || await this.getCurrentDay();
+      const currentDay = day !== undefined ? day : await this.getCurrentDay();
+      
+      // If it's day 0, return empty leaderboard as contract might not have data
+      if (currentDay === 0) {
+        console.log('Day 0 detected, returning empty leaderboard');
+        return [];
+      }
+
       const result = await fetchCallReadOnlyFunction({
         contractAddress: this.contractAddress,
         contractName: this.contractName,
@@ -101,18 +108,33 @@ export class BlockchainService {
       });
 
       const parsedResult = cvToValue(result);
-      if (parsedResult && parsedResult.leaderboard) {
+      console.log('Raw leaderboard data for day', currentDay, ':', parsedResult);
+      
+      // Handle the contract's response structure
+      if (parsedResult && parsedResult.leaderboard && Array.isArray(parsedResult.leaderboard)) {
         return parsedResult.leaderboard
-          .filter((entry: any) => entry !== null)
+          .filter((entry: any) => entry !== null && entry !== undefined && entry.player)
           .map((entry: any, index: number) => ({
-            player: entry.player,
-            score: entry.score,
+            player: String(entry.player),
+            score: Number(entry.score) || 0,
             rank: index + 1
           }));
       }
+      
+      // If the result is directly an array
+      if (Array.isArray(parsedResult)) {
+        return parsedResult
+          .filter((entry: any) => entry !== null && entry !== undefined && entry.player)
+          .map((entry: any, index: number) => ({
+            player: String(entry.player),
+            score: Number(entry.score) || 0,
+            rank: index + 1
+          }));
+      }
+      
       return [];
     } catch (error) {
-      console.error('Error fetching leaderboard:', error);
+      console.error('Error fetching leaderboard for day', day, ':', error);
       return [];
     }
   }
@@ -120,7 +142,14 @@ export class BlockchainService {
   // Get current pool amount for a specific day
   async getPoolAmount(day?: number): Promise<number> {
     try {
-      const currentDay = day || await this.getCurrentDay();
+      const currentDay = day !== undefined ? day : await this.getCurrentDay();
+      
+      // Return 0 for day 0 as contract might not have data
+      if (currentDay === 0) {
+        console.log('Day 0 detected, returning 0 pool amount');
+        return 0;
+      }
+
       const result = await fetchCallReadOnlyFunction({
         contractAddress: this.contractAddress,
         contractName: this.contractName,
@@ -131,9 +160,20 @@ export class BlockchainService {
       });
 
       const parsedResult = cvToValue(result);
-      return parsedResult?.pool || 0;
+      console.log('Raw pool data for day', currentDay, ':', parsedResult);
+      
+      // Try different possible data structures
+      if (parsedResult?.pool !== undefined) {
+        return Number(parsedResult.pool) || 0;
+      }
+      
+      if (typeof parsedResult === 'number') {
+        return parsedResult;
+      }
+      
+      return 0;
     } catch (error) {
-      console.error('Error fetching pool amount:', error);
+      console.error('Error fetching pool amount for day', day, ':', error);
       return 0;
     }
   }

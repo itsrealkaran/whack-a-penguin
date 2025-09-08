@@ -12,6 +12,9 @@ import { useSelector } from "react-redux";
 import Lives from "../Lives";
 import FinalScore from "../FinalScore";
 import gameConfig from "@gameconfig/index";
+import { playGame, fetchGameStats } from "@/store/slices/leaderboard";
+import { useStacks } from "@/contexts/StacksContext";
+import GameInfo from "../GameInfo";
 
 export interface MoleType {
   id: string;
@@ -22,12 +25,26 @@ export interface MoleType {
 const Battlefield = () => {
   const dispatch = useAppDispatch();
   const { lives, score } = useSelector((state: any) => state.gameReducer);
+  const { isConnected } = useStacks();
 
   const [molesArray, setMoles] = useState<MoleType[]>([]);
   const [gameOver, setGameOver] = useState(false);
 
-  const onMoleClick = () => {
+  const onMoleClick = async () => {
+    // Increment local score first for immediate feedback
     dispatch(incrementScore(gameConfig.INCREMENT_SCORE_BY));
+    
+    // If wallet is connected, also play on blockchain
+    if (isConnected) {
+      try {
+        await dispatch(playGame());
+        // Refresh game stats after successful play
+        dispatch(fetchGameStats());
+      } catch (error) {
+        console.error('Error playing on blockchain:', error);
+        // Don't revert local score, let user continue playing locally
+      }
+    }
   };
 
   const onEmptyHoleClick = () => {
@@ -62,9 +79,9 @@ const Battlefield = () => {
         <>
           <Header>
             <ButtonLink onClick={handleGoBack}>back</ButtonLink>
-            <Lives />
             <Score>score: {score}</Score>
           </Header>
+          <GameInfo />
           <Field data-testid="field">
             {molesArray.map((mole, index) => (
               <Mole 
@@ -75,6 +92,7 @@ const Battlefield = () => {
               />
             ))}
           </Field>
+          <Lives />
         </>
       ) : (
         <FinalScore score={score} />

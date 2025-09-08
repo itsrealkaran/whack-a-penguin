@@ -222,7 +222,7 @@
             (begin
               (let ((winner (get player leader))
                     (reward (/ (* pool REWARD_PERCENT) u100)))
-                (begin
+  (begin
                   ;; transfer reward from contract -> winner
                   (try! (stx-transfer? reward 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM winner))
                   (var-set last-rewarded-day day)

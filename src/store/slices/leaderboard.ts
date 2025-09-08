@@ -40,10 +40,10 @@ export const fetchGameStats = createAsyncThunk(
   }
 );
 
-export const submitScore = createAsyncThunk(
-  "leaderboard/submitScore",
-  async (score: number) => {
-    const response = await blockchainService.submitScore(score);
+export const playGame = createAsyncThunk(
+  "leaderboard/playGame",
+  async () => {
+    const response = await blockchainService.play();
     return response;
   }
 );
@@ -104,19 +104,20 @@ const leaderboardSlice = createSlice({
         state.error = action.error.message || 'Failed to fetch game stats';
       });
 
-    // Submit score
+    // Play game
     builder
-      .addCase(submitScore.pending, (state) => {
+      .addCase(playGame.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(submitScore.fulfilled, (state) => {
+      .addCase(playGame.fulfilled, (state, action) => {
         state.isLoading = false;
-        // Score submitted successfully, could trigger a refetch
+        // Play successful, transaction ID returned
+        console.log('Play transaction ID:', action.payload);
       })
-      .addCase(submitScore.rejected, (state, action) => {
+      .addCase(playGame.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message || 'Failed to submit score';
+        state.error = action.error.message || 'Failed to play game';
       });
   },
 });
